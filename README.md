@@ -1,24 +1,28 @@
 # TagOMatic
 
-TODO: Write a gem description
+Automates regenerating the tags file by using Git's post hook functionality.
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-    gem 'tag_o_matic'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install tag_o_matic
+```
+$ gem install tag_o_matic
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+In any Git repository run:
+
+```
+$ tagomatic install
+```
+
+This will install a post-hook and regenerate tags for the `app, lib and config` directories.
+
+
+## TODO: 
+
+* Write tests
+* Create website
 
 ## Contributing
 
