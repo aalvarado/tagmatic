@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'tagmatic'
 
 Gem::Specification.new do |spec|
-  spec.name          = "tag_o_matic"
+  spec.name          = "tagmatic"
   spec.version       = TagMatic::VERSION
   spec.authors       = ["Adan Alvarado"]
   spec.email         = ["adan.alvarado7@gmail.com"]
