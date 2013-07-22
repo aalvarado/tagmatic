@@ -1,11 +1,11 @@
-# TagOMatic
+# TagMatic
 
 Automates regenerating the tags file by using Git's post hook functionality.
 
 ## Installation
 
 ```
-$ gem install tag_o_matic
+$ gem install tagmatic
 ```
 
 ## Usage
@@ -13,7 +13,7 @@ $ gem install tag_o_matic
 In any Git repository run:
 
 ```
-$ tagomatic install
+$ tagmatic install
 ```
 
 This will install a post-hook and regenerate tags for the `app, lib and config` directories.
