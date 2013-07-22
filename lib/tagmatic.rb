@@ -1,12 +1,12 @@
-class TagOMatic
+class TagMatic
   VERSION = "0.0.1"
 
   HASH_BANG = "#!/bin/bash"
   TAGS_FILE_NAME = "tags"
-  TAGOMATIC_BIN = 'tagomatic'
+  TAGMATIC_BIN = 'tagmatic'
 
   TEMPLATE = <<-TMPL
-#{TAGOMATIC_BIN} generate-tags .
+#{TAGMATIC_BIN} generate-tags .
 TMPL
 
   CTAGS_CMD = 'ctags -Ra'

@@ -1,15 +1,15 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'tag_o_matic'
+require 'tagmatic'
 
 Gem::Specification.new do |spec|
   spec.name          = "tag_o_matic"
-  spec.version       = TagOMatic::VERSION
+  spec.version       = TagMatic::VERSION
   spec.authors       = ["Adan Alvarado"]
   spec.email         = ["adan.alvarado7@gmail.com"]
   spec.description   = %q{Automatically regenarate tags files with Git hooks}
-  spec.summary       = %q{Tag_o_matic will recreate the tags file for you whenever your HEAD changes}
+  spec.summary       = %q{Tagmatic will recreate the tags file for you whenever your HEAD changes}
   spec.homepage      = ""
   spec.license       = "MIT"
 
