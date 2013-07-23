@@ -2,6 +2,10 @@
 
 Automates regenerating the tags file by using Git's post hook functionality.
 
+## Dependencies
+
+Tagmatic depends on Ctags. Search for `Installing ctags` for your operating system.
+
 ## Installation
 
 ```
