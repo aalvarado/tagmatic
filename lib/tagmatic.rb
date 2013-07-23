@@ -26,6 +26,13 @@ TMPL
 run install to install to hooks to regenerate your tags file
 HELP
 
+  HOOKS_DIR = 'hooks'
+
+  HOOKS_FILES = [
+    'post-checkout',
+    'post-merge'
+  ]
+
   attr_accessor :current_dir
 
   def initialize *argv
@@ -45,9 +52,11 @@ HELP
   end
 
   def install *argv
-    append(File.join(git_dir, 'hooks', 'post-checkout'), 0777) do |body, f|
-      f.puts HASH_BANG unless body
-      f.puts TEMPLATE
+    HOOKS_FILES.each do |file_name|
+      append(File.join(git_dir, HOOKS_DIR, file_name), 0777) do |body, f|
+        f.puts HASH_BANG unless body
+        f.puts TEMPLATE
+      end
     end
     puts 'all tagged up'
   end
