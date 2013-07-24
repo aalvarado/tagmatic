@@ -60,6 +60,15 @@ CMD_NOT_FOUND = 'Command not found'
     puts 'all tagged up'
   end
 
+  def generate_tags(dir_path)
+    puts 'Regenerating tags...'
+    self.current_dir = File.expand_path(dir_path.pop)
+    remove_tags_file(dir_path)
+    APP_DIRECTORIES.each do |path|
+      result = `#{CTAGS_CMD} #{ignore} #{path}` if File.exists?(path)
+    end
+  end
+
   def help
     puts "#{HELP}"
   end
@@ -84,15 +93,6 @@ CMD_NOT_FOUND = 'Command not found'
     body = File.read(file) if File.exist?(file)
     File.open(file, 'a', *args) do |f|
       yield body, f
-    end
-  end
-
-  def generate_tags(dir_path)
-    puts 'Regenerating tags...'
-    self.current_dir = File.expand_path(dir_path.pop)
-    remove_tags_file(dir_path)
-    APP_DIRECTORIES.each do |path|
-      result = `#{CTAGS_CMD} #{ignore} #{path}` if File.exists?(path)
     end
   end
 
