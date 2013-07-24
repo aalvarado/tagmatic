@@ -1,8 +1,8 @@
 class TagMatic
-  VERSION = "0.0.2"
+  VERSION = '0.0.2'
 
-  HASH_BANG = "#!/bin/bash"
-  TAGS_FILE_NAME = "tags"
+  HASH_BANG = '#!/bin/bash'
+  TAGS_FILE_NAME = 'tags'
   TAGMATIC_BIN = 'tagmatic'
 
   TEMPLATE = <<-TMPL
@@ -11,47 +11,46 @@ TMPL
 
   CTAGS_CMD = 'ctags -Ra'
   LANGUAGES_FLAGS = '--languages='
-  APP_DIRECTORIES = [
-    'app',
-    'config',
-    'lib'
-  ]
+  APP_DIRECTORIES = %w/
+    app
+    config
+    lib
+    src
+  /
 
-  IGNORE_FILES = [
-    'javascript',
-    'sql'
-  ]
+  IGNORE_FILES = %w/
+    javascript
+    sql
+  /
 
   HELP = <<-HELP
-run install to install to hooks to regenerate your tags file
+Run `tagmatic install` to setup the hooks that regenerate your 'tags' file.
 HELP
+
+CMD_NOT_FOUND = 'Command not found'
 
   HOOKS_DIR = 'hooks'
 
-  HOOKS_FILES = [
-    'post-checkout',
-    'post-merge'
-  ]
+  HOOKS_FILES = %w/
+    post-checkout
+    post-merge
+  /
 
   attr_accessor :current_dir
 
-  def initialize *argv
+  def initialize(*argv)
     command = argv.shift
     command = command.tr('-', '_') if command
 
-    if command && respond_to?( command )
-      send( command, argv )
+    if command && respond_to?(command)
+      send(command, argv)
     else
-      display_help
+      puts CMD_NOT_FOUND
+      help
     end
   end
 
-  def git_dir
-    @git_dir = %x[git rev-parse --git-dir].chomp
-    @git_dir
-  end
-
-  def install *argv
+  def install(*argv)
     HOOKS_FILES.each do |file_name|
       append(File.join(git_dir, HOOKS_DIR, file_name), 0777) do |body, f|
         f.puts HASH_BANG unless body
@@ -61,8 +60,19 @@ HELP
     puts 'all tagged up'
   end
 
-  def display_help
-    puts HELP
+  def help
+    puts "#{HELP}"
+  end
+
+  def version
+    puts "#{VERSION}"
+  end
+
+  protected
+
+  def git_dir
+    @git_dir = %x[git rev-parse --git-dir].chomp
+    @git_dir
   end
 
   def tags_file_name
@@ -77,17 +87,17 @@ HELP
     end
   end
 
-  def generate_tags dir_path
+  def generate_tags(dir_path)
     puts 'Regenerating tags...'
-    self.current_dir = File.expand_path( dir_path.pop )
-    remove_tags_file( dir_path )
+    self.current_dir = File.expand_path(dir_path.pop)
+    remove_tags_file(dir_path)
     APP_DIRECTORIES.each do |path|
-      result = `#{CTAGS_CMD} #{ignore} #{path}` if File.exists?( path )
+      result = `#{CTAGS_CMD} #{ignore} #{path}` if File.exists?(path)
     end
   end
 
-  def remove_tags_file dir_path
-    File.delete( tags_path ) if File.exists?( tags_path )
+  def remove_tags_file(dir_path)
+    File.delete(tags_path) if File.exists?(tags_path)
   end
 
   def tags_path
@@ -101,11 +111,10 @@ HELP
   def ignore_file_types
     langs = ''
     IGNORE_FILES.each do |ft|
-      langs << "," unless langs.empty?
+      langs << ',' unless langs.empty?
       langs << "-#{ft}"
     end
     langs
   end
 
-  protected :append
 end
