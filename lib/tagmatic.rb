@@ -1,3 +1,5 @@
+require 'open3'
+
 class TagMatic
   VERSION = '0.0.2'
 
@@ -42,8 +44,10 @@ CMD_NOT_FOUND = 'Command not found'
     command = argv.shift
     command = command.tr('-', '_') if command
 
-    if command && respond_to?(command)
+    if command && respond_to?(command) && argv
       send(command, argv)
+    elsif command && respond_to?(command)
+      send(command)
     else
       puts CMD_NOT_FOUND
       help
@@ -61,11 +65,15 @@ CMD_NOT_FOUND = 'Command not found'
   end
 
   def generate_tags(dir_path)
+    raise ArgumentError.new('missing directory') if dir_path.empty?
     puts 'Regenerating tags...'
     self.current_dir = File.expand_path(dir_path.pop)
     remove_tags_file(dir_path)
     APP_DIRECTORIES.each do |path|
-      result = `#{CTAGS_CMD} #{ignore} #{path}` if File.exists?(path)
+      result = `#{CTAGS_CMD}s #{ignore} #{path}` if File.exists?(path)
+      unless $?.to_i == 0
+        raise RuntimeError, result
+      end
     end
   end
 
