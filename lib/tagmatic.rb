@@ -3,16 +3,8 @@ require 'open3'
 class TagMatic
   VERSION = '0.0.2'
 
-  HASH_BANG = '#!/bin/bash'
-  TAGS_FILE_NAME = 'tags'
-  TAGMATIC_BIN = 'tagmatic'
+  HASH_BANG       = '#!/bin/bash'
 
-  TEMPLATE = <<-TMPL
-#{TAGMATIC_BIN} generate-tags .
-TMPL
-
-  CTAGS_CMD = 'ctags -Ra'
-  LANGUAGES_FLAGS = '--languages='
   APP_DIRECTORIES = %w/
     app
     config
@@ -24,14 +16,6 @@ TMPL
     javascript
     sql
   /
-
-  HELP = <<-HELP
-Run `tagmatic install` to setup the hooks that regenerate your 'tags' file.
-HELP
-
-CMD_NOT_FOUND = 'Command not found'
-
-  HOOKS_DIR = 'hooks'
 
   HOOKS_FILES = %w/
     post-checkout
@@ -49,16 +33,16 @@ CMD_NOT_FOUND = 'Command not found'
     elsif command && respond_to?(command)
       send(command)
     else
-      puts CMD_NOT_FOUND
-      help
+      puts 'Command not found'
+      puts help
     end
   end
 
   def install(*argv)
     HOOKS_FILES.each do |file_name|
-      append(File.join(git_dir, HOOKS_DIR, file_name), 0777) do |body, f|
+      append(File.join(git_dir, 'hooks', file_name), 0777) do |body, f|
         f.puts HASH_BANG unless body
-        f.puts TEMPLATE
+        f.puts 'tagmatic generate-tags .'
       end
     end
     puts 'all tagged up'
@@ -70,7 +54,7 @@ CMD_NOT_FOUND = 'Command not found'
     self.current_dir = File.expand_path(dir_path.pop)
     remove_tags_file(dir_path)
     APP_DIRECTORIES.each do |path|
-      result = `#{CTAGS_CMD}s #{ignore} #{path}` if File.exists?(path)
+      result = `ctags -Ra #{ignore} #{path}` if File.exists?(path)
       unless $?.to_i == 0
         raise RuntimeError, result
       end
@@ -78,11 +62,11 @@ CMD_NOT_FOUND = 'Command not found'
   end
 
   def help
-    puts "#{HELP}"
+    'Run `tagmatic install` to setup the hooks that regenerate your "tags" file.'
   end
 
-  def version
-    puts "#{VERSION}"
+  def __version
+    puts VERSION
   end
 
   protected
@@ -90,10 +74,6 @@ CMD_NOT_FOUND = 'Command not found'
   def git_dir
     @git_dir = %x[git rev-parse --git-dir].chomp
     @git_dir
-  end
-
-  def tags_file_name
-    TAGS_FILE_NAME
   end
 
   def append(file, *args)
@@ -108,12 +88,16 @@ CMD_NOT_FOUND = 'Command not found'
     File.delete(tags_path) if File.exists?(tags_path)
   end
 
+  def tags_file_name
+    'tags'
+  end
+
   def tags_path
     File.join current_dir, tags_file_name
   end
 
   def ignore
-    "#{LANGUAGES_FLAGS}#{ignore_file_types}" if ignore_file_types
+    "--languages=#{ignore_file_types}" if ignore_file_types
   end
 
   def ignore_file_types
@@ -124,5 +108,4 @@ CMD_NOT_FOUND = 'Command not found'
     end
     langs
   end
-
 end
