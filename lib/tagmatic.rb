@@ -1,5 +1,3 @@
-require 'open3'
-
 class TagMatic
   VERSION = '0.0.2'
 
@@ -38,7 +36,7 @@ class TagMatic
     end
   end
 
-  def install(*argv)
+  def install
     HOOKS_FILES.each do |file_name|
       append(File.join(git_dir, 'hooks', file_name), 0777) do |body, f|
         f.puts HASH_BANG unless body
@@ -72,8 +70,7 @@ class TagMatic
   protected
 
   def git_dir
-    @git_dir = %x[git rev-parse --git-dir].chomp
-    @git_dir
+    @git_dir ||= %x[git rev-parse --git-dir].chomp
   end
 
   def append(file, *args)
@@ -101,11 +98,6 @@ class TagMatic
   end
 
   def ignore_file_types
-    langs = ''
-    IGNORE_FILES.each do |ft|
-      langs << ',' unless langs.empty?
-      langs << "-#{ft}"
-    end
-    langs
+    IGNORE_FILES.join(',-').prepend('-') if IGNORE_FILES.any?
   end
 end
