@@ -21,6 +21,7 @@ class TagMatic
   /
 
   HOOK_TEMPLATE = 'tagmatic generate-tags .'
+  HELP = 'Run `tagmatic install` to setup the hooks that regenerate your "tags" file.'
 
   attr_accessor :current_dir
 
@@ -34,7 +35,7 @@ class TagMatic
       send(command)
     else
       puts 'Command not found'
-      puts help
+      help
     end
   end
 
@@ -61,7 +62,7 @@ class TagMatic
   end
 
   def help
-    'Run `tagmatic install` to setup the hooks that regenerate your "tags" file.'
+    puts HELP
   end
 
   def __version
