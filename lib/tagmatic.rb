@@ -20,13 +20,15 @@ class TagMatic
     post-merge
   /
 
+  HOOK_TEMPLATE = 'tagmatic generate-tags .'
+
   attr_accessor :current_dir
 
   def initialize(*argv)
     command = argv.shift
     command = command.tr('-', '_') if command
 
-    if command && respond_to?(command) && argv
+    if command && respond_to?(command) && argv.any?
       send(command, argv)
     elsif command && respond_to?(command)
       send(command)
@@ -39,8 +41,7 @@ class TagMatic
   def install
     HOOKS_FILES.each do |file_name|
       append(File.join(git_dir, 'hooks', file_name), 0777) do |body, f|
-        f.puts HASH_BANG unless body
-        f.puts 'tagmatic generate-tags .'
+        [HASH_BANG, HOOK_TEMPLATE].each{ |text| f.puts(text) unless body && body.include?(text) }
       end
     end
     puts 'all tagged up'
