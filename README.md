@@ -1,6 +1,6 @@
 # TagMatic
 
-Automates regenerating the tags file by using Git's post hook functionality.
+Automates regenerating the tags (ctags) file by using Git's post hook functionality.
 
 ## Dependencies
 
