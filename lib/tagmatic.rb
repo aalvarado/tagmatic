@@ -42,7 +42,9 @@ class TagMatic
   def install
     HOOKS_FILES.each do |file_name|
       append(File.join(git_dir, 'hooks', file_name), 0777) do |body, f|
-        [HASH_BANG, HOOK_TEMPLATE].each{ |text| f.puts(text) unless body && body.include?(text) }
+        [HASH_BANG, HOOK_TEMPLATE].each do |text|
+          f.puts(text) unless body && body.include?(text)
+        end
       end
     end
     puts 'all tagged up'
@@ -55,7 +57,7 @@ class TagMatic
     remove_tags_file(dir_path)
     APP_DIRECTORIES.each do |path|
       result = `ctags -Ra #{ignore} #{path}` if File.exists?(path)
-      unless $?.to_i == 0
+      unless $CHILD_STATUS.to_i == 0
         raise RuntimeError, result
       end
     end
