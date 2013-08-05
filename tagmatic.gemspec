@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = TagMatic::VERSION
   spec.authors       = ["Adan Alvarado"]
   spec.email         = ["adan.alvarado7@gmail.com"]
-  spec.description   = %q{Automatically regenarate tags files with Git hooks}
-  spec.summary       = %q{Tagmatic will recreate the tags file for you whenever your HEAD changes}
+  spec.description   = %q{Automatically regenarate ctags files with Git hooks}
+  spec.summary       = %q{Tagmatic will recreate the tags (ctags) file for you whenever your HEAD changes}
   spec.homepage      = ""
   spec.license       = "MIT"
 
@@ -20,4 +20,5 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
+  spec.add_development_dependency "rspec"
 end
