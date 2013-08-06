@@ -1,5 +1,5 @@
 class TagMatic
-  VERSION = '0.0.2'
+  VERSION = '0.0.3'
 
   HASH_BANG       = '#!/bin/bash'
 
