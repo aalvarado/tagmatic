@@ -102,6 +102,6 @@ class TagMatic
   end
 
   def ignore_file_types
-    IGNORE_FILES.join(',-').prepend('-') if IGNORE_FILES.any?
+    [ '-', IGNORE_FILES.join(',-') ].join if IGNORE_FILES.any?
   end
 end
